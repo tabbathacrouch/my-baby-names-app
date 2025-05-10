@@ -20,7 +20,7 @@ Check out the live demo **[here](https://baby-names-hqb2tprq6-tabbathacrouchs-pr
 
 ```bash
 git clone https://github.com/tabbathacrouch/my-baby-names-app.git
-cd baby-name-swipe-app
+cd my-baby-names-app
 ```
 
 2. **Install Dependencies**
