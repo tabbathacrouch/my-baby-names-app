@@ -43,13 +43,14 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
     onSubmit: async ({ formApi }) => {
       const likedList = likedNames.map((name) => name.name);
       const dislikedList = dislikedNames.map((name) => name.name);
-      console.log({ likedList, dislikedList });
+
       const result = await sendResultsEmail(
         form.getFieldValue("fromName"),
         likedList,
         dislikedList,
         form.getFieldValue("userEmail")
       );
+
       setDialogOpen(false);
       if (result) {
         setSnackbarMessage("Email sent Successfully!");
@@ -60,8 +61,6 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
       }
     },
   });
-
-  console.log(form.state);
 
   const formSubmitting = form.state.isValidating || form.state.isSubmitting;
 
