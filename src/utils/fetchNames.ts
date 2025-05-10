@@ -1,10 +1,12 @@
 import type { BabyName } from "../types";
 
 export async function fetchNames(): Promise<BabyName[]> {
+  const API_URL = import.meta.env.VITE_API_SHEETBEST_URL;
+
+  if (!API_URL) throw new Error(`Invalid API_URL`);
+
   try {
-    const response = await fetch(
-      "https://api.sheetbest.com/sheets/8ab858e3-a6ac-4666-afe6-cc44bfa9e2b3"
-    );
+    const response = await fetch(`${API_URL}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch names: ${response.statusText}`);
