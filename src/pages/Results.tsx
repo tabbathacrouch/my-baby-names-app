@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Container,
   Typography,
@@ -9,35 +10,60 @@ import {
   DialogContent,
   TextField,
   DialogActions,
+  Snackbar,
+  IconButton,
 } from "@mui/material";
-import type { BabyName } from "../types";
+import CloseIcon from "@mui/icons-material/Close";
+import { useForm } from "@tanstack/react-form";
+import type { FormValues, ResultsProps } from "../types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { sendResultsEmail } from "../utils/sendEmail";
+import { required, object, pipe, string, minLength, email } from "valibot";
 
-interface ResultsProps {
-  likedNames: BabyName[];
-  dislikedNames: BabyName[];
-}
+const emailFormSchema = required(
+  object({
+    fromName: pipe(string(), minLength(1)),
+    userEmail: pipe(string(), email()),
+  }),
+  ["fromName"]
+);
 
 export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
-  const [fromName, setFromName] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  const handleSendEmail = async () => {
-    setSending(true);
+  const form = useForm({
+    defaultValues: {
+      fromName: "",
+      userEmail: "",
+    } as FormValues,
+    validators: { onSubmit: emailFormSchema },
+    onSubmit: async ({ formApi }) => {
+      const likedList = likedNames.map((name) => name.name);
+      const dislikedList = dislikedNames.map((name) => name.name);
+      console.log({ likedList, dislikedList });
+      const result = await sendResultsEmail(
+        form.getFieldValue("fromName"),
+        likedList,
+        dislikedList,
+        form.getFieldValue("userEmail")
+      );
+      setDialogOpen(false);
+      if (result) {
+        setSnackbarMessage("Email sent Successfully!");
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage("Error sending email!");
+        setSnackbarOpen(true);
+      }
+    },
+  });
 
-    const likedList = likedNames.map((name) => name.name);
-    const dislikedList = dislikedNames.map((name) => name.name);
+  console.log(form.state);
 
-    const result = await sendResultsEmail(fromName, likedList, dislikedList);
-
-    setSending(false);
-    setDialogOpen(false);
-    setSuccess(result);
-  };
+  const formSubmitting = form.state.isValidating || form.state.isSubmitting;
 
   return (
     <Container
@@ -114,9 +140,7 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
         sx={{ mt: 4, width: 320, borderRadius: "8px" }}
         onClick={() => setDialogOpen(true)}
         disabled={
-          sending ||
-          success ||
-          (likedNames.length < 1 && dislikedNames.length < 1)
+          formSubmitting || (likedNames.length < 1 && dislikedNames.length < 1)
         }
       >
         Email Results
@@ -144,17 +168,50 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Send Results</DialogTitle>
         <DialogContent>
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Your Name"
-            value={fromName}
-            onChange={(e) => setFromName(e.target.value)}
+          <form.Field
+            name={"fromName"}
+            children={({ state, handleChange, handleBlur }) => {
+              return (
+                <TextField
+                  required
+                  fullWidth
+                  margin="normal"
+                  label="Your Name"
+                  defaultValue={state.value}
+                  onChange={(e) => handleChange(e.target.value)}
+                  onBlur={handleBlur}
+                  error={state.meta.errors.length > 0}
+                  helperText={
+                    state.meta.errors.length > 0 && "Please enter your name"
+                  }
+                />
+              );
+            }}
+          />
+          <form.Field
+            name={"userEmail"}
+            children={({ state, handleChange, handleBlur }) => (
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Your Email"
+                defaultValue={state.value}
+                onChange={(e) => handleChange(e.target.value)}
+                onBlur={handleBlur}
+                error={state.meta.errors.length > 0}
+                helperText={
+                  state.meta.errors.length > 0 && "Please enter your email"
+                }
+              />
+            )}
           />
         </DialogContent>
         <DialogActions sx={{ gap: 1 }}>
           <Button
-            onClick={() => setDialogOpen(false)}
+            onClick={() => {
+              setDialogOpen(false);
+              form.reset();
+            }}
             color="secondary"
             variant="outlined"
             sx={{
@@ -171,17 +228,17 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
             Cancel
           </Button>
           <Button
-            onClick={handleSendEmail}
+            onClick={form.handleSubmit}
             color="primary"
             variant="contained"
-            disabled={sending}
+            disabled={formSubmitting}
             sx={{ borderRadius: "8px" }}
           >
-            {sending ? "Sending..." : "Send Results"}
+            {formSubmitting ? "Sending..." : "Send Results"}
           </Button>
         </DialogActions>
       </Dialog>
-      {success && (
+      {form.state.isSubmitSuccessful && (
         <Typography
           variant="body1"
           sx={{ color: "#388e3c", textAlign: "center", mt: 2 }}
@@ -189,6 +246,24 @@ export const Results = ({ likedNames, dislikedNames }: ResultsProps) => {
           Results sent successfully! 🎉
         </Typography>
       )}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={() => setSnackbarOpen(false)}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </Container>
   );
 };

@@ -5,3 +5,13 @@ export interface BabyName {
   popularity?: string;
   link?: string;
 }
+
+export interface ResultsProps {
+  likedNames: BabyName[];
+  dislikedNames: BabyName[];
+}
+
+export interface FormValues {
+  fromName: string;
+  userEmail: string;
+}
