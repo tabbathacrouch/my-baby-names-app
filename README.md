@@ -1,54 +1,62 @@
-# React + TypeScript + Vite
+# Baby Name (Tinder) App 👶💞
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **React + TypeScript** application for selecting baby names, inspired by **Tinder**. Users can **like** or **dislike** names, and then **email** their results!
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Check out the live demo **[here](https://baby-names-hqb2tprq6-tabbathacrouchs-projects.vercel.app/)**.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Look through baby names
+- Email your results to baby's mom
+- Responsive design for mobile and desktop
+- Deployed to Vercel
+- Environment variable support for secure API keys
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+
+1. **Clone the Repository**
+
+```bash
+git clone https://github.com/tabbathacrouch/my-baby-names-app.git
+cd baby-name-swipe-app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Install Dependencies**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm install
 ```
+
+3. **Add Environment Variables**
+
+Create a **`.env`** file in the project root:
+
+```
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+Make sure to **replace** the values with your actual [**EmailJS**](https://www.emailjs.com/) credentials.
+
+4. **Run the Development Server**
+
+```bash
+pnpm dev
+```
+
+## EmailJS Setup
+
+1. Create a **free** account on **[EmailJS](https://www.emailjs.com/)**.
+2. Create a **new service** and connect your email provider.
+3. Create a **new email template** with the following fields:
+
+   - **from_name**
+   - **liked_names**
+   - **disliked_names**
+
+## Contributing
+
+Pull requests are **welcome**! For major changes, please open an issue first to discuss what you would like to change.
