@@ -58,6 +58,7 @@ export const Home = ({ onSwipe, currentIndex, resetIndex }: HomeProps) => {
         variant="outlined"
         color="secondary"
         onClick={resetIndex}
+        disabled={currentIndex === 0}
         sx={{
           mt: 2,
           width: 320,
