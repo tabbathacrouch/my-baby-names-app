@@ -1,3 +1,4 @@
+import React from "React";
 import TinderCard from "react-tinder-card";
 import type { BabyName } from "../types";
 import { NameCard } from "./NameCard";
