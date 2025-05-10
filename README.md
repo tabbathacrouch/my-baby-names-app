@@ -37,6 +37,7 @@ Create a **`.env`** file in the project root:
 VITE_EMAILJS_SERVICE_ID=your_service_id
 VITE_EMAILJS_TEMPLATE_ID=your_template_id
 VITE_EMAILJS_PUBLIC_KEY=your_public_key
+VITE_API_SHEETBEST_URL=your_sheetbest_url
 ```
 
 Make sure to **replace** the values with your actual [**EmailJS**](https://www.emailjs.com/) credentials.
@@ -56,6 +57,13 @@ pnpm dev
    - **from_name**
    - **liked_names**
    - **disliked_names**
+
+## SheetBest API Setup
+
+1. Create a **Google Sheet** with your baby names.
+2. Use **SheetBest** to connect your Google Sheet to an API.
+3. Add the **SheetBest** URL to your **`.env`** file as **`VITE_API_SHEETBEST_URL`**.
+4. Make sure the Google Sheet has the required columns (e.g., **name**, **meaning**, **origin**, **popularity**).
 
 ## Contributing
 
