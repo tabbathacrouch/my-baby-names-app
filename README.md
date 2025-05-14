@@ -4,7 +4,7 @@ A **React + TypeScript** application for selecting baby names, inspired by **Tin
 
 ## 🚀 Live Demo
 
-Check out the live demo **[here](https://baby-names-hqb2tprq6-tabbathacrouchs-projects.vercel.app/)**.
+Check out the live demo **[here](https://my-baby-names-app.vercel.app/)**.
 
 ## Features
 
