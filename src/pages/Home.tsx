@@ -17,9 +17,20 @@ export const Home = ({ onSwipe, currentIndex, resetIndex }: HomeProps) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["babyNames"],
+    queryKey: ['sheet', 'names'],
     queryFn: fetchNames,
+    select: (rows): BabyName[] => {
+      const [, ...dataRows] = rows; // skip header
+      return dataRows.map(([name, meaning, origin, popularity, link]: string[]) => ({
+        name,
+        meaning,
+        origin,
+        popularity,
+        link,
+      }));
+    },
   });
+
 
   if (isLoading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">Failed to load names</Typography>;

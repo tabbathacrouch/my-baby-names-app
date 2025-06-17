@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/theme.ts","./src/vite-env.d.ts","./src/components/namecard.tsx","./src/components/swipedeck.tsx","./src/pages/home.tsx","./src/pages/results.tsx","./src/types/index.ts","./src/utils/fetchnames.ts","./src/utils/sendemail.ts"],"version":"5.8.3"}
